@@ -1,4 +1,4 @@
-==tair_init==
+=tair_init=
 初始化tair链接, 并返回资源描述符.  *注: 该函数永远是持续链接*
 
 *Description*
@@ -12,7 +12,7 @@
 *Return Values*
  *  Resouce<tair session>
 
-==tair_get==
+=tair_get=
 
 *Description*
  mixed tair_get(string $resource, string $key) 
@@ -26,7 +26,7 @@
 
 获取不到结果, 会返回false
 
-==tair_put==
+=tair_put=
 
 *Description*
 {{{
@@ -43,7 +43,7 @@
 *Return Values*
  *  bollean
 
-==tair_incr==
+=tair_incr=
 
 *Description*
 使指定的key自增,并返回结果
@@ -60,7 +60,7 @@
 *Return Values*
  *  int result
 
-==tair_decr==
+=tair_decr=
 
 *Description*
 使指定的key自减,并返回结果
@@ -78,7 +78,7 @@ int tair_incr(string $resource, string $key,[ int $step, [ int $init_value, [int
 *Return Values*
  *  int result
 
-==tair_last_msg==
+=tair_last_msg=
 
 *Description*
 返回上个tair执行的结果信息
