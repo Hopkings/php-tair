@@ -1,0 +1,13 @@
+// $Id$
+// vim:ft=javascript
+
+// If your extension references something external, use ARG_WITH
+// ARG_WITH("tair", "for tair support", "no");
+
+// Otherwise, use ARG_ENABLE
+// ARG_ENABLE("tair", "enable tair support", "no");
+
+if (PHP_TAIR != "no") {
+	EXTENSION("tair", "tair.c");
+}
+
