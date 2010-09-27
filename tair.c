@@ -5,6 +5,9 @@
 #include "php.h"
 #include "php_ini.h"
 #include "ext/standard/info.h"
+#include "ext/standard/php_string.h"
+#include "ext/standard/php_var.h"
+#include "ext/standard/php_smart_str.h"
 
 #include "php_tair.h"
 #include "defined.h"
@@ -191,10 +194,24 @@ PHP_FUNCTION(tair_get) {
 	}
 
 	ZEND_FETCH_RESOURCE(tsession, tair_handler, &r, -1, "Tair session", le_tair);
-
 	last_rst = tair_get(tsession, PHP_TAIR_AREA, &key_data, &value_data);
+	
+		            
 	if(last_rst ==TAIR_RETURN_SUCCESS){
-    	RETURN_STRINGL(value_data.data,value_data.len,1);    
+	    
+    	php_unserialize_data_t var_hash;
+
+    	PHP_VAR_UNSERIALIZE_INIT(var_hash);
+    	if (!php_var_unserialize(&return_value, &value_data.data, value_data.data + value_data.len, &var_hash TSRMLS_CC)) {
+    		ZVAL_FALSE(return_value);
+    		PHP_VAR_UNSERIALIZE_DESTROY(var_hash);
+    		efree(value_data.data);
+    		php_error_docref(NULL TSRMLS_CC, E_NOTICE, "unable to unserialize data");
+    		return 0;
+    	}
+        
+    	PHP_VAR_UNSERIALIZE_DESTROY(var_hash);
+        return;
 	}else{
         RETURN_BOOL(0);
 	}
@@ -202,16 +219,20 @@ PHP_FUNCTION(tair_get) {
 
 PHP_FUNCTION(tair_put) {
 
-	zval *r;
+	zval *r, *value;
 	tair_handler tsession;
 	tair_data_pair key_data,value_data;
 	int arg_expire=0;
 	int arg_version=0;
+	
+	php_serialize_data_t value_hash;
+	smart_str buf = {0};
+	
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rss|ll",
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rsz|ll",
 				&r,
 				&key_data.data, &key_data.len,
-				&value_data.data, &value_data.len,
+				&value,
 				&arg_expire,
 				&arg_version
 				) == FAILURE) {
@@ -220,7 +241,61 @@ PHP_FUNCTION(tair_put) {
 
 	ZEND_FETCH_RESOURCE(tsession, tair_handler, &r, -1, "Tair session", le_tair);
 
-	last_rst = tair_put(tsession, PHP_TAIR_AREA, &key_data, &value_data,arg_expire, arg_version );
+    switch (Z_TYPE_P(value)) {
+		case IS_STRING:
+            value_data.data = Z_STRVAL_P(value);
+            value_data.len = Z_STRLEN_P(value);
+		    last_rst = tair_put(tsession, PHP_TAIR_AREA, &key_data, &value_data,arg_expire, arg_version );
+			break;
+
+		case IS_LONG:
+		case IS_DOUBLE:
+		case IS_BOOL: {
+			zval value_copy;
+
+			/* FIXME: we should be using 'Z' instead of this, but unfortunately it's PHP5-only */
+			value_copy = *value;
+			zval_copy_ctor(&value_copy);
+			convert_to_string(&value_copy);
+
+            value_data.data = Z_STRVAL_P(&value_copy);
+            value_data.len = Z_STRLEN_P(&value_copy);
+		    last_rst = tair_put(tsession, PHP_TAIR_AREA, &key_data, &value_data,arg_expire, arg_version );
+
+			zval_dtor(&value_copy);
+			break;
+		}
+
+		default: {
+			zval value_copy, *value_copy_ptr;
+
+			/* FIXME: we should be using 'Z' instead of this, but unfortunately it's PHP5-only */
+			value_copy = *value;
+			zval_copy_ctor(&value_copy);
+			value_copy_ptr = &value_copy;
+
+			PHP_VAR_SERIALIZE_INIT(value_hash);
+			php_var_serialize(&buf, &value_copy_ptr, &value_hash TSRMLS_CC);
+			PHP_VAR_SERIALIZE_DESTROY(value_hash);
+
+			if (!buf.c) {
+				/* something went really wrong */
+				zval_dtor(&value_copy);
+				php_error_docref(NULL TSRMLS_CC, E_WARNING, "Failed to serialize value");
+				RETURN_FALSE;
+			}
+
+			zval_dtor(&value_copy);
+
+            value_data.data = buf.c;
+            value_data.len = buf.len;
+
+		    last_rst = tair_put(tsession, PHP_TAIR_AREA, &key_data, &value_data,arg_expire, arg_version );
+		}
+	}
+
+	smart_str_free(&buf);
+
 	RETURN_BOOL(last_rst==TAIR_RETURN_SUCCESS ? 1 : 0);
 }
 
