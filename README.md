@@ -1,12 +1,12 @@
 # php-tair
-Automatically exported from code.google.com/p/php-tair.
+Automatically exported from http://code.google.com/p/php-tair/.
 
 Tair is a distributed, high performance key/value storage system.
 Here is the client for php.
 
 
 
-安装
+一、安装
 
  pacman -Sy php-tair
  
@@ -15,7 +15,7 @@ Here is the client for php.
  
  
  
-使用方法（http://code.google.com/p/php-tair/wiki/Usage）：
+二、使用方法（http://code.google.com/p/php-tair/wiki/Usage）
 
 1、tair_init
 初始化tair链接, 并返回资源描述符. 注: 该函数永远是持续链接
