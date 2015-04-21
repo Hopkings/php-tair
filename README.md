@@ -118,7 +118,9 @@ Return Values
 
  <?php
  $rs = tair_init('10.0.0.210',null,'group_1');
+ 
  $value = tair_get($rs,'key_not_exists');
+ 
  if($value*false){
       print_r(tair_last_msg());
  }
