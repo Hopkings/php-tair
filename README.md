@@ -10,6 +10,7 @@ Here is the client for php.
  AUR: http://aur.archlinux.org/packages.php?ID=41157 
  
  
+ 
 使用方法（http://code.google.com/p/php-tair/wiki/Usage）：
 
 1、tair_init
