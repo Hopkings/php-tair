@@ -1,6 +1,6 @@
 # php-tair
 
-I序言
+一、序言
 Base on google.com
 
 Tair is a distributed, high performance key/value storage system.
@@ -10,7 +10,7 @@ Here is the client for php.
 
 
 
-一、安装
+二、安装
 
  pacman -Sy php-tair
  
@@ -18,5 +18,5 @@ Here is the client for php.
  
 
  
-二、使用方法
+三、使用方法
   http://www.xxxphp.com/?p=167
