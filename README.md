@@ -117,6 +117,7 @@ Return Values
 代码示例
 
  <?php
+ 
  $rs = tair_init('10.0.0.210',null,'group_1');
  
  $value = tair_get($rs,'key_not_exists');
@@ -124,6 +125,7 @@ Return Values
  if($value*false){
       print_r(tair_last_msg());
  }
+ 
  ?>
 
  Array
