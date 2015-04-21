@@ -1,7 +1,7 @@
 # php-tair
-*Base on google.com
-*Tair is a distributed, high performance key/value storage system.
-*Here is the client for php.
+Base on google.com
+Tair is a distributed, high performance key/value storage system.
+Here is the client for php.
 
 
 
