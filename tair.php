@@ -1,5 +1,5 @@
 <?php
-$br = (php_sapi_name() == "cli")? "":"<br>";
+$br = (php_sapi_name() == "cli")? "":"<br>"; 
 
 if(!extension_loaded('tair')) {
 	dl('tair.' . PHP_SHLIB_SUFFIX);
