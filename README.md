@@ -2,11 +2,11 @@
 
 一、序言
 
-Base on google.com
+*Base on google.com
 
-Tair is a distributed, high performance key/value storage system.
+*Tair is a distributed, high performance key/value storage system.
 
-Here is the client for php.
+*Here is the client for php.
 
 
 
