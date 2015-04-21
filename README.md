@@ -1,14 +1,17 @@
 # php-tair
-Automatically exported from code.google.com/p/php-tair
+Automatically exported from code.google.com/p/php-tair.
 
 Tair is a distributed, high performance key/value storage system.
 Here is the client for php.
 
 
+
 安装
+
  pacman -Sy php-tair
  
  AUR: http://aur.archlinux.org/packages.php?ID=41157 
+ 
  
  
  
