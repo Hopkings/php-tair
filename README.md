@@ -7,6 +7,7 @@ Here is the client for php.
 
 安装
  pacman -Sy php-tair
+ 
  AUR: http://aur.archlinux.org/packages.php?ID=41157 
  
  
